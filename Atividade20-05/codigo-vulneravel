@@ -1,0 +1,20 @@
+#CÓDIGO VULNERÁVEL (Sujeito a SQL Injection e Força Bruta)
+<?php
+// conexão com banco de dados
+$conn = new mysqli("localhost", "root", "", "meubanco");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $usuario = $_POST['usuario'];
+    $senha = $_POST['senha'];
+
+    // Consulta vulnerável a SQL Injection
+    $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario' AND senha = '$senha'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows == 1) {
+        echo "Login bem-sucedido!";
+    } else {
+        echo "Usuário ou senha inválidos.";
+    }
+}
+?>

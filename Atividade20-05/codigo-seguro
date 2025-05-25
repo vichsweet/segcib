@@ -1,0 +1,45 @@
+<?php
+session_start();
+
+// conexão segura com o banco
+$conn = new mysqli("localhost", "root", "", "meubanco");
+
+// limitar tentativas de login
+if (!isset($_SESSION['tentativas'])) {
+    $_SESSION['tentativas'] = 0;
+}
+
+if ($_SESSION['tentativas'] > 5) {
+    die("Muitas tentativas de login. Tente novamente mais tarde.");
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $usuario = $_POST['usuario'];
+    $senha = $_POST['senha'];
+
+    // uso de prepared statements para evitar SQL Injection
+    $stmt = $conn->prepare("SELECT senha FROM usuarios WHERE usuario = ?");
+    $stmt->bind_param("s", $usuario);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows == 1) {
+        $stmt->bind_result($senha_hash);
+        $stmt->fetch();
+
+        // verificar senha com hash
+        if (password_verify($senha, $senha_hash)) {
+            echo "Login bem-sucedido!";
+            $_SESSION['tentativas'] = 0; // resetar tentativas após sucesso
+        } else {
+            $_SESSION['tentativas']++;
+            echo "Usuário ou senha inválidos.";
+        }
+    } else {
+        $_SESSION['tentativas']++;
+        echo "Usuário ou senha inválidos.";
+    }
+
+    $stmt->close();
+}
+?>

@@ -1,4 +1,5 @@
 #CÓDIGO VULNERÁVEL (Sujeito a SQL Injection e Força Bruta)
+
 <?php
 // conexão com banco de dados
 $conn = new mysqli("localhost", "root", "", "meubanco");

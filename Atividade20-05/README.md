@@ -1,1 +1,1 @@
-
+Apresente um código (pode ser em qualquer linguagem) que possa estar sujeito a ataques de SQL Injection e/ou Força Bruta. Faça implementações deixem o código mais seguro, em relação esses tipos de ataques, então explique qual(is) o(s) tipo(s) de ataque que está(ão) sendo evitados e qual a parte do código que evita esse ataque.

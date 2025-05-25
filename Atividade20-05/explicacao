@@ -1,0 +1,27 @@
+Explicação:
+1. SQL Injection
+Tipo de ataque:
+O invasor insere comandos SQL maliciosos em campos de entrada, podendo acessar ou modificar dados no banco de forma indevida.
+Exemplo de entrada maliciosa:
+usuario: admin
+senha: ' OR '1'='1
+Proteção usada:
+$stmt = $conn->prepare("SELECT senha FROM usuarios WHERE usuario = ?");
+$stmt->bind_param("s", $usuario);
+O uso de prepared statements com parâmetros impede que o conteúdo inserido pelo usuário seja interpretado como código SQL.
+
+2. Força Bruta
+Tipo de ataque:
+O atacante tenta várias combinações de login/senha até encontrar a correta.
+Proteção usada:
+if ($_SESSION['tentativas'] > 5) {
+    die("Muitas tentativas de login.");
+}
+Este trecho limita o número de tentativas por sessão. Pode ser melhorado ainda com bloqueio por IP, captcha ou atrasos progressivos.
+
+3. Senha em Texto Puro
+Tipo de risco:
+Mesmo que não seja um ataque direto, guardar senhas como texto simples é uma falha crítica de segurança.
+Proteção usada:
+password_verify($senha, $senha_hash);
+O uso de hash seguro com password_hash (no cadastro) e password_verify (no login) protege a senha mesmo se o banco for exposto.
